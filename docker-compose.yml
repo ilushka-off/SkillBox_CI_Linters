@@ -3,7 +3,7 @@ services:
     image: postgres:16-alpine
     restart: on-failure
     env_file:
-      - ./core/.env
+      - src/core/.env
     ports:
       - "5433:5432"
     volumes:
@@ -16,7 +16,7 @@ services:
     build: .
     restart: on-failure
     env_file:
-      - ./core/.env
+      - src/core/.env
     environment:
       - POSTGRES_HOST=db
       - POSTGRES_PORT=5432

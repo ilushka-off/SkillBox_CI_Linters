@@ -1,14 +1,13 @@
 import inflection
 from sqlalchemy import MetaData
-from sqlalchemy.ext.declarative import declared_attr
-from sqlalchemy.orm import DeclarativeBase, declarative_mixin
+from sqlalchemy.orm import DeclarativeBase, declarative_mixin, declared_attr
 
 
 @declarative_mixin
 class BaseModel(DeclarativeBase):
     """Base db model class."""
 
-    @declared_attr
+    @declared_attr.directive
     def __tablename__(cls) -> str:
         """Generate __tablename__ automatically."""
 

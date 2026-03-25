@@ -1,9 +1,8 @@
-from typing import Sequence, Any
+from typing import Sequence
 
-from sqlalchemy import select, delete, Result
+from sqlalchemy import select
 from db.models import Client
 from db.repositories.base import BaseDatabaseRepository
-
 
 
 class ClientRepository(BaseDatabaseRepository):
@@ -12,7 +11,7 @@ class ClientRepository(BaseDatabaseRepository):
         query_result = await self._session.execute(query)
         return query_result.scalars().all()
 
-    async def get_client_by_id(self, id: int) -> Client:
+    async def get_client_by_id(self, id: int) -> Client | None:
         query = select(Client).where(Client.id == id)
         query_result = await self._session.execute(query)
         return query_result.scalar()

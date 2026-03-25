@@ -33,11 +33,11 @@ class ClientParkingService:
         client_parking = ClientParking(
             client_id=schema.client_id,
             parking_id=schema.parking_id,
-            time_in=datetime.now(timezone.utc)
+            time_in=datetime.now(timezone.utc),
         )
         await self._client_parking_repo.create_client_parking(client_parking)
         await self._client_parking_repo._session.commit()
-        
+
         return client_parking
 
     async def exit_parking(self, schema: ClientParkingCreateSchema) -> ClientParking:
@@ -51,7 +51,9 @@ class ClientParkingService:
         if not parking:
             raise HTTPException(status_code=404, detail="Parking not found")
 
-        client_parking = await self._client_parking_repo.get_client_parking(schema.client_id, schema.parking_id)
+        client_parking = await self._client_parking_repo.get_client_parking(
+            schema.client_id, schema.parking_id
+        )
         if not client_parking or client_parking.time_out is not None:
             raise HTTPException(status_code=400, detail="Client is not in this parking")
 

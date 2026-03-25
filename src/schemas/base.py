@@ -12,4 +12,7 @@ class BaseKeySchema(BaseModel):
     prefix: str
 
     def get_key(self, *args: Any) -> str:
-        return f"{self.prefix}{self.delimiter}" f"{self.delimiter.join(str(arg) for arg in args)}"
+        return (
+            f"{self.prefix}{self.delimiter}"
+            f"{self.delimiter.join(str(arg) for arg in args)}"
+        )

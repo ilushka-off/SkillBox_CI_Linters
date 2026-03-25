@@ -4,13 +4,16 @@ from db.models import Client, Parking
 
 faker = Faker()
 
+
 class ClientFactory(factory.Factory):
     class Meta:
         model = Client
 
     name = factory.Faker("first_name")
     surname = factory.Faker("last_name")
-    credit_card = factory.LazyAttribute(lambda x: faker.credit_card_number() if faker.boolean() else None)
+    credit_card = factory.LazyAttribute(
+        lambda x: faker.credit_card_number() if faker.boolean() else None
+    )
     car_number = factory.Faker("license_plate")
 
 

@@ -18,4 +18,3 @@ class Client(BaseModel, IDMixin):
     car_number: Mapped[str] = mapped_column(String(length=50), nullable=True)
 
     visits: Mapped[List["ClientParking"]] = relationship(back_populates="client")
-

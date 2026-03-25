@@ -3,7 +3,7 @@ from logging.config import fileConfig
 
 from alembic import context
 from sqlalchemy import engine_from_config, pool
-from sqlalchemy.engine import Connection, create_engine
+from sqlalchemy.engine import Connection
 from sqlalchemy.ext.asyncio import AsyncEngine
 
 from core.config import settings
@@ -14,8 +14,7 @@ from db.models import BaseModel
 config = context.config
 config.set_main_option(
     "sqlalchemy.url",
-    settings()
-    .postgres_dsn.replace(
+    settings().postgres_dsn.replace(
         "%",  # config parser escapes % with another % https://github.com/sqlalchemy/alembic/discussions/1280,
         "%%",  # https://docs.python.org/3/library/configparser.html#configparser.BasicInterpolation
     ),

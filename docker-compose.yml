@@ -13,7 +13,9 @@ services:
       - app-network
 
   app:
-    build: .
+    build:
+      context: .
+      dockerfile: src/Dockerfile
     restart: on-failure
     env_file:
       - src/core/.env

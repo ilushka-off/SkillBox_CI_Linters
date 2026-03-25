@@ -1,18 +1,27 @@
-FROM python:3.11-slim
+FROM python:3.14-slim
 
-WORKDIR /app
+WORKDIR /usr/src/app
 
-RUN apt-get update && apt-get install -y gcc libpq-dev && rm -rf /var/lib/apt/lists/*
+ENV PYTHONDONTWRITEBYTECODE 1
+ENV PYTHONUNBUFFERED 1
 
-RUN pip install poetry
+RUN apt-get update \
+  && apt-get install -y netcat-traditional make curl \
+  && pip install --default-timeout=100 poetry
 
-COPY ../pyproject.toml ./
-RUN poetry config virtualenvs.create false \
-  && poetry install --no-interaction --no-ansi --no-root
+COPY ./pyproject.toml ./poetry.lock ./
 
-COPY .. .
+ARG DEV_DEPS=False
 
-ENV PYTHONUNBUFFERED=1
+RUN poetry config virtualenvs.create false
+RUN if [ $DEV_DEPS = True ] ; then \
+  poetry install --no-root --no-interaction --no-ansi ; else \
+  poetry install --no-root --only main --no-interaction --no-ansi ; fi
 
-EXPOSE 8000
-x
+ENV TZ=Europe/Moscow
+RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
+
+COPY . .
+
+WORKDIR /usr/src/app/src
+CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000"]

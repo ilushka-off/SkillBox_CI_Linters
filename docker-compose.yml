@@ -1,0 +1,38 @@
+services:
+  db:
+    image: postgres:16-alpine
+    restart: on-failure
+    env_file:
+      - ./core/.env
+    ports:
+      - "5433:5432"
+    volumes:
+      - data:/var/lib/postgresql/data
+    command: postgres -c log_destination=stderr -c logging_collector=on -c log_directory=/var/lib/postgresql/data/log
+    networks:
+      - app-network
+
+#  app:
+#    build: .
+#    restart: on-failure
+#    env_file:
+#      - ./core/.env
+#    environment:
+#      - POSTGRES_HOST=db
+#      - POSTGRES_PORT=5432
+#    ports:
+#      - "8000:8000"
+#    volumes:
+#      - .:/app
+#    depends_on:
+#      - db
+#    networks:
+#      - app-network
+#    command: sh -c "alembic upgrade head && uvicorn main:app --host 0.0.0.0 --port 8000"
+
+volumes:
+  data:
+
+networks:
+  app-network:
+    driver: bridge
